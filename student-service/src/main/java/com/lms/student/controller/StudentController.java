@@ -31,13 +31,13 @@ public class StudentController {
         }
     }
 
-    // Keep your original method for backward compatibility
+    // Simple endpoint for backward compatibility
     @GetMapping("/all")
     public List<Student> getAllStudents() {
         return service.getAllStudents();
     }
 
-    // New paginated endpoint for frontend
+    // Paginated endpoint for frontend
     @GetMapping
     public ResponseEntity<Page<Student>> getAllStudentsPaginated(
             @RequestParam(defaultValue = "0") int page,
@@ -86,7 +86,6 @@ public class StudentController {
         }
     }
 
-    // Health check for dashboard
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         Map<String, Object> health = new HashMap<>();

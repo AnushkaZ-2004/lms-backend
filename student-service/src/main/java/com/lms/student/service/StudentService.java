@@ -18,7 +18,6 @@ public class StudentService {
     private StudentRepository repository;
 
     public Student createStudent(Student student) {
-        // Add email validation
         if (repository.existsByEmail(student.getEmail())) {
             throw new RuntimeException("Email already exists: " + student.getEmail());
         }
@@ -29,12 +28,10 @@ public class StudentService {
         return repository.findAll();
     }
 
-    // New method for pagination that frontend needs
     public Page<Student> getAllStudents(int page, int size, String search) {
         Pageable pageable = PageRequest.of(page, size);
 
         if (search != null && !search.trim().isEmpty()) {
-            // Search in both name and email
             return repository.findByFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                     search.trim(), search.trim(), pageable);
         }
@@ -78,7 +75,6 @@ public class StudentService {
         repository.deleteById(id);
     }
 
-    // New method for dashboard stats
     public long getTotalStudentCount() {
         return repository.count();
     }
