@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="course-service" />
+        <module name="submission-service" />
+        <module name="announcement-service" />
+        <module name="auth-service" />
+        <module name="quiz-service" />
+        <module name="student-service" />
+        <module name="material-service" />
+        <module name="assignment-service" />
+        <module name="lecturer-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="announcement-service" options="-parameters" />
+      <module name="assignment-service" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="course-service" options="-parameters" />
+      <module name="lecturer-service" options="-parameters" />
+      <module name="material-service" options="-parameters" />
+      <module name="quiz-service" options="-parameters" />
+      <module name="student-service" options="-parameters" />
+      <module name="submission-service" options="-parameters" />
+    </option>
+  </component>
+</project>
