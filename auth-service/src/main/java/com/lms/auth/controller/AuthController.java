@@ -3,12 +3,15 @@ package com.lms.auth.controller;
 import com.lms.auth.model.User;
 import com.lms.auth.service.AuthService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Add CORS
 public class AuthController {
 
     private final AuthService authService;
@@ -18,33 +21,63 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody Map<String, String> body) {
-        return authService.register(
-                body.get("fullName"),
-                body.get("email"),
-                body.get("password"),
-                body.get("role")
-        );
+    public ResponseEntity<?> register(@RequestBody Map<String, String> body) {
+        try {
+            User user = authService.register(
+                    body.get("fullName"),
+                    body.get("email"),
+                    body.get("password"),
+                    body.get("role")
+            );
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Map<String, String> body, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body, HttpSession session) {
         var user = authService.login(body.get("email"), body.get("password"));
         if (user.isPresent()) {
             session.setAttribute("user", user.get());
-            return "Login success!";
+
+            // Return JSON response that frontend expects
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Login successful");
+            response.put("user", user.get());
+
+            return ResponseEntity.ok(response);
         }
-        return "Invalid email or password";
+
+        // Return JSON error response
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", "Invalid email or password");
+        return ResponseEntity.status(401).body(response);
     }
 
     @GetMapping("/me")
-    public Object getCurrentUser(HttpSession session) {
-        return session.getAttribute("user");
+    public ResponseEntity<?> getCurrentUser(HttpSession session) {
+        Object user = session.getAttribute("user");
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", "Not authenticated");
+        return ResponseEntity.status(401).body(response);
     }
 
     @PostMapping("/logout")
-    public String logout(HttpSession session) {
+    public ResponseEntity<?> logout(HttpSession session) {
         session.invalidate();
-        return "Logged out successfully";
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Logged out successfully");
+        return ResponseEntity.ok(response);
     }
 }
