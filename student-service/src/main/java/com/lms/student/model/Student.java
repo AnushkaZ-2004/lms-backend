@@ -12,12 +12,10 @@ public class Student {
 
     private String fullName;
 
-    @Column(unique = true)
     private String email;
 
     private String registrationNo;
 
-    // Constructors
     public Student() {}
 
     public Student(String fullName, String email, String registrationNo) {
@@ -51,11 +49,12 @@ public class Student {
         this.email = email;
     }
 
+    public void setRegistrationNo(String registrationNo) {
+        this.registrationNo = registrationNo;
+    }
+
     public String getRegistrationNo() {
         return registrationNo;
     }
 
-    public void setRegistrationNo(String registrationNo) {
-        this.registrationNo = registrationNo;
-    }
 }
